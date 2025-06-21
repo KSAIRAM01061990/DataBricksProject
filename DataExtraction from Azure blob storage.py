@@ -1,0 +1,41 @@
+# Databricks notebook source
+# MAGIC %sql
+# MAGIC CREATE OR REPLACE STREAMING LIVE TABLE Product_Rawdata
+# MAGIC COMMENT 'BRONZ TABLE Raw Product Data'
+# MAGIC AS
+# MAGIC SELECT *,
+# MAGIC input_file_name() AS File_Name,
+# MAGIC current_timestamp() AS Load_date 
+# MAGIC FROM cloud_files("/mnt/sourcedataforproduct","csv")
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC CREATE OR REPLACE STREAMING LIVE TABLE Product
+# MAGIC COMMENT 'SILVER PRODUCT DATA'
+# MAGIC AS
+# MAGIC SELECT * FROM
+# MAGIC (
+# MAGIC SELECT *,
+# MAGIC ROW_NUMBER() OVER (PARTITION BY ProductID ORDER BY ProductID) AS RN
+# MAGIC FROM STREAM(live.Product_Rawdata)
+# MAGIC )
+# MAGIC WHERE RN = 1
+# MAGIC
+# MAGIC
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC CREATE OR REPLACE LIVE TABLE Product_2002
+# MAGIC COMMENT 'GLOD PRODUCT DATA'
+# MAGIC AS
+# MAGIC SELECT 
+# MAGIC '2002' AS YEAR 
+# MAGIC ,Color
+# MAGIC ,SUM(CAST(StandardCost AS FLOAT)) AS AMOUNT FROM LIVE.Product
+# MAGIC WHERE YEAR(CAST(SellStartDate AS DATE))=2002
+# MAGIC GROUP BY Color

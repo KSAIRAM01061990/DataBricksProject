@@ -1,0 +1,40 @@
+{
+  "datasets" : [ {
+    "name" : "cbd49d9d",
+    "displayName" : "Customer zip wise sum amount",
+    "query" : "select pickup_zip,sum(fare_amount) from samples.nyctaxi.trips \ngroup by pickup_zip"
+  } ],
+  "pages" : [ {
+    "name" : "c24e4cbd",
+    "displayName" : "Untitled Page",
+    "layout" : [ {
+      "widget" : {
+        "name" : "0e29d287",
+        "queries" : [ {
+          "name" : "66d8f2275f4a49518a18eeba128c77b0",
+          "query" : {
+            "datasetName" : "cbd49d9d",
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 0,
+          "viz_spec" : {
+            "display_name" : "Results",
+            "description" : "",
+            "viz_type" : "TABLE",
+            "serialized_options" : "{\"version\": 2}",
+            "query_name" : "66d8f2275f4a49518a18eeba128c77b0"
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 3,
+        "height" : 6
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  } ]
+}
